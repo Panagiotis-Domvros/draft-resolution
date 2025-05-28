@@ -1,1 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MUN Draft Resolution Builder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #f5f5f5, #e8f4f8);
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 10px;
+    }
+    .header-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .header-info input {
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-left: 5px;
+    }
+    .section {
+      margin-bottom: 30px;
+      border: 1px solid #eee;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    .section-title {
+      background: #3498db;
+      color: white;
+      padding: 10px 15px;
+      margin: -20px -20px 20px -20px;
+      border-radius: 8px 8px 0 0;
+    }
+    textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: 'Poppins', sans-serif;
+      margin-top: 10px;
+    }
+    .phrase-bank {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+    }
+    .phrase {
+      display: inline-block;
+      background: #e3f2fd;
+      padding: 5px 10px;
+      margin: 5px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9em;
+    }
+    .phrase:hover {
+      background: #bbdefb;
+    }
+    .clause-number {
+      font-weight: bold;
+      color: #3498db;
+    }
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    button {
+      background-color: #3498db;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-family: 'Poppins', sans-serif;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    #output {
+      white-space: pre-wrap;
+      background: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 20px;
+      border: 1px solid #ddd;
+      font-family: monospace;
+    }
+    .instructions {
+      background: #e8f4f8;
+      padding: 15px;
+      border-left: 4px solid #3498db;
+      margin-bottom: 20px;
+      border-radius: 4px;
+    }
+    .signatories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .signatory-input {
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      min-width: 200px;
+    }
+    .add-signatory {
+      background: #27ae60;
+    }
+    .add-signatory:hover {
+      background: #219653;
+    }
+    .clause-controls {
+      margin-top: 10px;
+    }
+    .clause-item {
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px dashed #ddd;
+    }
+    .remove-clause {
+      background: #e74c3c;
+      padding: 3px 8px;
+      font-size: 0.8em;
+      margin-left: 10px;
+    }
+    .remove-clause:hover {
+      background: #c0392b;
+    }
+    .title-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .credit-line {
+      text-align: center;
+      font-size: 0.9em;
+      font-style: italic;
+      margin-bottom: 20px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="credit-line">Created by Panagiotis Domvros 2025 (CC BY-NC)</div>
+    
+    <div class="title-container">
+      <img src="PyleaMUN_finalstamp.png" alt="PyleaMUN Logo" style="height: 60px;">
+      <h1>MUN Draft Resolution Builder</h1>
+    </div>
+    
+    <div class="instructions">
+      <h3>How to Use This Builder:</h3>
+      <ol>
+        <li>Fill in the header information (committee, topic, etc.)</li>
+        <li>Add preambulatory clauses (statements of fact, acknowledgments)</li>
+        <li>Add operative clauses (actions to be taken)</li>
+        <li>Add signatory countries</li>
+        <li>Preview and copy your draft resolution</li>
+      </ol>
+      <p><strong>Tip:</strong> Click on phrases in the phrase banks to insert them into your clauses.</p>
+    </div>
 
+    <!-- Rest of the HTML remains exactly the same -->
+    <div class="header-info">
+      <div>
+        <label>Committee: <input type="text" id="committee" placeholder="e.g., UNSC, UNGA"></label>
+      </div>
+      <div>
+        <label>Agenda Item: <input type="text" id="agendaItem" placeholder="Topic being discussed"></label>
+      </div>
+      <div>
+        <label>Main Submitter: <input type="text" id="mainSubmitter" placeholder="Primary country"></label>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Preambulatory Clauses</div>
+      <p>These clauses state facts, acknowledge past actions, and set the context for the resolution.</p>
+      
+      <div id="preambulatoryClauses">
+        <!-- Clauses will be added here -->
+      </div>
+      
+      <button id="addPreambulatory">+ Add Preambulatory Clause</button>
+      
+      <div class="phrase-bank">
+        <h4>Preambulatory Phrases (click to insert):</h4>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Affirming')">Affirming</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Alarmed by')">Alarmed by</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Appreciating')">Appreciating</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Aware of')">Aware of</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Bearing in mind')">Bearing in mind</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Believing')">Believing</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Concerned')">Concerned</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Condemning')">Condemning</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Confident')">Confident</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Congratulating')">Congratulating</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Conscious of')">Conscious of</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Declaring')">Declaring</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Deeply concerned')">Deeply concerned</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Deeply conscious')">Deeply conscious</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Deeply convinced')">Deeply convinced</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Deeply disturbed')">Deeply disturbed</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Deeply regretting')">Deeply regretting</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Deploring')">Deploring</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Desiring')">Desiring</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Emphasizing')">Emphasizing</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Expecting')">Expecting</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Expressing its appreciation')">Expressing its appreciation</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Expressing its satisfaction')">Expressing its satisfaction</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Fulfilling')">Fulfilling</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Fully alarmed')">Fully alarmed</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Fully aware')">Fully aware</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Fully believing')">Fully believing</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Further deploring')">Further deploring</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Further recalling')">Further recalling</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Guided by')">Guided by</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Having adopted')">Having adopted</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Having considered')">Having considered</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Having examined')">Having examined</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Having received')">Having received</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Keeping in mind')">Keeping in mind</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Noting with deep concern')">Noting with deep concern</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Noting with satisfaction')">Noting with satisfaction</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Noting further')">Noting further</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Observing')">Observing</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Reaffirming')">Reaffirming</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Realizing')">Realizing</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Recalling')">Recalling</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Recognizing')">Recognizing</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Referring')">Referring</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Seeking')">Seeking</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Taking into account')">Taking into account</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Taking into consideration')">Taking into consideration</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Viewing with appreciation')">Viewing with appreciation</div>
+        <div class="phrase" onclick="insertPhrase('preambulatory', 'Welcoming')">Welcoming</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Operative Clauses</div>
+      <p>These clauses specify the actions to be taken by the committee or member states.</p>
+      
+      <div id="operativeClauses">
+        <!-- Clauses will be added here -->
+      </div>
+      
+      <button id="addOperative">+ Add Operative Clause</button>
+      
+      <div class="phrase-bank">
+        <h4>Operative Phrases (click to insert):</h4>
+        <div class="phrase" onclick="insertPhrase('operative', 'Accepts')">Accepts</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Affirms')">Affirms</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Approves')">Approves</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Authorizes')">Authorizes</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Calls')">Calls</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Calls upon')">Calls upon</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Condemns')">Condemns</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Confirms')">Confirms</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Congratulates')">Congratulates</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Considers')">Considers</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Declares')">Declares</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Deplores')">Deplores</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Designates')">Designates</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Draws attention')">Draws attention</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Emphasizes')">Emphasizes</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Encourages')">Encourages</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Endorses')">Endorses</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Expresses its appreciation')">Expresses its appreciation</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Expresses its hope')">Expresses its hope</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Further invites')">Further invites</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Further proclaims')">Further proclaims</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Further recommends')">Further recommends</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Further reminds')">Further reminds</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Further requests')">Further requests</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Further resolves')">Further resolves</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Has resolved')">Has resolved</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Notes')">Notes</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Proclaims')">Proclaims</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Reaffirms')">Reaffirms</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Recommends')">Recommends</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Regrets')">Regrets</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Reminds')">Reminds</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Requests')">Requests</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Requires')">Requires</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Resolves')">Resolves</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Solemnly affirms')">Solemnly affirms</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Strongly condemns')">Strongly condemns</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Supports')">Supports</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Takes note of')">Takes note of</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Transmits')">Transmits</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Trusts')">Trusts</div>
+        <div class="phrase" onclick="insertPhrase('operative', 'Urges')">Urges</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Signatories</div>
+      <p>List the countries that support this resolution (minimum 20% of committee for UNGA).</p>
+      
+      <div id="signatories">
+        <!-- Signatories will be added here -->
+      </div>
+      
+      <div class="signatories">
+        <input type="text" id="newSignatory" class="signatory-input" placeholder="Country name">
+        <button class="add-signatory" onclick="addSignatory()">+ Add Signatory</button>
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button id="previewBtn">Preview Draft Resolution</button>
+      <button id="copyBtn">Copy to Clipboard</button>
+      <button id="saveBtn">Save Draft</button>
+      <button id="loadBtn">Load Draft</button>
+      <button id="clearBtn">Clear All</button>
+    </div>
+
+    <div id="output"></div>
+  </div>
+
+  <script>
+    // Global variables
+    let preambulatoryCount = 0;
+    let operativeCount = 0;
+    let signatories = [];
+    
+    // Initialize the app
+    document.addEventListener("DOMContentLoaded", function() {
+      // Add event listeners
+      document.getElementById("addPreambulatory").addEventListener("click", addPreambulatoryClause);
+      document.getElementById("addOperative").addEventListener("click", addOperativeClause);
+      document.getElementById("previewBtn").addEventListener("click", generateResolution);
+      document.getElementById("copyBtn").addEventListener("click", copyToClipboard);
+      document.getElementById("saveBtn").addEventListener("click", saveDraft);
+      document.getElementById("loadBtn").addEventListener("click", loadDraft);
+      document.getElementById("clearBtn").addEventListener("click", clearAll);
+      
+      // Add initial clauses
+      addPreambulatoryClause();
+      addOperativeClause();
+    });
+    
+    // Add a new preambulatory clause
+    function addPreambulatoryClause() {
+      preambulatoryCount++;
+      const clauseId = `preambulatory-${preambulatoryCount}`;
+      const clausesDiv = document.getElementById("preambulatoryClauses");
+      
+      const clauseDiv = document.createElement("div");
+      clauseDiv.className = "clause-item";
+      clauseDiv.innerHTML = `
+        <div>
+          <span class="clause-number">Preambulatory ${preambulatoryCount}:</span>
+          <textarea id="${clauseId}" placeholder="Begin with a preambulatory phrase (e.g., 'Affirming', 'Recognizing')"></textarea>
+        </div>
+        <div class="clause-controls">
+          <button class="remove-clause" onclick="removeClause('${clauseId}')">Remove</button>
+        </div>
+      `;
+      
+      clausesDiv.appendChild(clauseDiv);
+    }
+    
+    // Add a new operative clause
+    function addOperativeClause() {
+      operativeCount++;
+      const clauseId = `operative-${operativeCount}`;
+      const clausesDiv = document.getElementById("operativeClauses");
+      
+      const clauseDiv = document.createElement("div");
+      clauseDiv.className = "clause-item";
+      clauseDiv.innerHTML = `
+        <div>
+          <span class="clause-number">Operative ${operativeCount}:</span>
+          <textarea id="${clauseId}" placeholder="Begin with an operative phrase (e.g., 'Calls upon', 'Recommends')"></textarea>
+        </div>
+        <div class="clause-controls">
+          <button class="remove-clause" onclick="removeClause('${clauseId}')">Remove</button>
+        </div>
+      `;
+      
+      clausesDiv.appendChild(clauseDiv);
+    }
+    
+    // Remove a clause
+    function removeClause(clauseId) {
+      const clauseElement = document.getElementById(clauseId).parentElement.parentElement;
+      clauseElement.remove();
+      
+      // Update numbering (optional enhancement)
+      // This would require renumbering all clauses of the same type
+    }
+    
+    // Add a signatory
+    function addSignatory() {
+      const input = document.getElementById("newSignatory");
+      const country = input.value.trim();
+      
+      if (country) {
+        signatories.push(country);
+        input.value = "";
+        updateSignatoriesDisplay();
+      }
+    }
+    
+    // Update the signatories display
+    function updateSignatoriesDisplay() {
+      const signatoriesDiv = document.getElementById("signatories");
+      signatoriesDiv.innerHTML = "<h4>Signatories:</h4>";
+      
+      if (signatories.length === 0) {
+        signatoriesDiv.innerHTML += "<p>No signatories yet</p>";
+      } else {
+        const list = document.createElement("div");
+        list.style.columnCount = "3";
+        
+        signatories.forEach((country, index) => {
+          const countryDiv = document.createElement("div");
+          countryDiv.textContent = `${index + 1}. ${country}`;
+          list.appendChild(countryDiv);
+        });
+        
+        signatoriesDiv.appendChild(list);
+      }
+    }
+    
+    // Insert a phrase into the appropriate textarea
+    function insertPhrase(type, phrase) {
+      let textarea;
+      
+      if (type === 'preambulatory') {
+        const clauses = document.querySelectorAll('#preambulatoryClauses textarea');
+        textarea = clauses[clauses.length - 1];
+      } else {
+        const clauses = document.querySelectorAll('#operativeClauses textarea');
+        textarea = clauses[clauses.length - 1];
+      }
+      
+      if (textarea) {
+        const currentValue = textarea.value.trim();
+        textarea.value = currentValue ? `${currentValue} ${phrase}` : phrase;
+        textarea.focus();
+      }
+    }
+    
+    // Generate the resolution text
+    function generateResolution() {
+      const committee = document.getElementById("committee").value || "[Committee]";
+      const agendaItem = document.getElementById("agendaItem").value || "[Agenda Item]";
+      const mainSubmitter = document.getElementById("mainSubmitter").value || "[Main Submitter]";
+      
+      // Get preambulatory clauses
+      const preambulatoryClauses = [];
+      document.querySelectorAll('#preambulatoryClauses textarea').forEach(textarea => {
+        if (textarea.value.trim()) {
+          preambulatoryClauses.push(textarea.value.trim());
+        }
+      });
+      
+      // Get operative clauses
+      const operativeClauses = [];
+      document.querySelectorAll('#operativeClauses textarea').forEach(textarea => {
+        if (textarea.value.trim()) {
+          operativeClauses.push(textarea.value.trim());
+        }
+      });
+      
+      // Build the resolution text
+      let resolutionText = `Draft Resolution ${Math.floor(Math.random() * 10) + 1}.1\n`;
+      resolutionText += `${committee}\n`;
+      resolutionText += `Agenda Item: ${agendaItem}\n\n`;
+      resolutionText += `Main Submitter: ${mainSubmitter}\n\n`;
+      
+      resolutionText += `The ${committee},\n\n`;
+      
+      // Add preambulatory clauses
+      if (preambulatoryClauses.length > 0) {
+        resolutionText += `${preambulatoryClauses.map((clause, index) => 
+          `${index === 0 ? '' : '\n'}${clause},`).join('')}\n\n`;
+      }
+      
+      // Add operative clauses
+      if (operativeClauses.length > 0) {
+        resolutionText += `${operativeClauses.map((clause, index) => 
+          `${index === 0 ? '' : '\n'}${index + 1}. ${clause};`).join('')}\n\n`;
+      }
+      
+      // Add signatories
+      if (signatories.length > 0) {
+        resolutionText += `Signatories: ${signatories.join(', ')}`;
+      }
+      
+      // Display the resolution
+      document.getElementById("output").textContent = resolutionText;
+    }
+    
+    // Copy to clipboard
+    function copyToClipboard() {
+      const output = document.getElementById("output");
+      if (!output.textContent.trim()) {
+        alert("Please generate a preview first!");
+        return;
+      }
+      
+      navigator.clipboard.writeText(output.textContent).then(() => {
+        alert("Draft resolution copied to clipboard!");
+      }).catch(err => {
+        alert("Failed to copy text: " + err);
+      });
+    }
+    
+    // Save draft to localStorage
+    function saveDraft() {
+      const draft = {
+        committee: document.getElementById("committee").value,
+        agendaItem: document.getElementById("agendaItem").value,
+        mainSubmitter: document.getElementById("mainSubmitter").value,
+        preambulatoryClauses: Array.from(document.querySelectorAll('#preambulatoryClauses textarea')).map(t => t.value),
+        operativeClauses: Array.from(document.querySelectorAll('#operativeClauses textarea')).map(t => t.value),
+        signatories: signatories
+      };
+      
+      localStorage.setItem("munDraftResolution", JSON.stringify(draft));
+      alert("Draft saved successfully!");
+    }
+    
+    // Load draft from localStorage
+    function loadDraft() {
+      const savedDraft = localStorage.getItem("munDraftResolution");
+      if (!savedDraft) {
+        alert("No saved draft found!");
+        return;
+      }
+      
+      if (confirm("Load saved draft? This will overwrite your current work.")) {
+        const draft = JSON.parse(savedDraft);
+        
+        // Clear current clauses
+        document.getElementById("preambulatoryClauses").innerHTML = "";
+        document.getElementById("operativeClauses").innerHTML = "";
+        preambulatoryCount = 0;
+        operativeCount = 0;
+        
+        // Set header info
+        document.getElementById("committee").value = draft.committee || "";
+        document.getElementById("agendaItem").value = draft.agendaItem || "";
+        document.getElementById("mainSubmitter").value = draft.mainSubmitter || "";
+        
+        // Add preambulatory clauses
+        draft.preambulatoryClauses.forEach(clause => {
+          addPreambulatoryClause();
+          const textareas = document.querySelectorAll('#preambulatoryClauses textarea');
+          textareas[textareas.length - 1].value = clause;
+        });
+        
+        // Add operative clauses
+        draft.operativeClauses.forEach(clause => {
+          addOperativeClause();
+          const textareas = document.querySelectorAll('#operativeClauses textarea');
+          textareas[textareas.length - 1].value = clause;
+        });
+        
+        // Set signatories
+        signatories = draft.signatories || [];
+        updateSignatoriesDisplay();
+        
+        alert("Draft loaded successfully!");
+      }
+    }
+    
+    // Clear all inputs
+    function clearAll() {
+      if (confirm("Are you sure you want to clear all inputs? This cannot be undone.")) {
+        // Clear header info
+        document.getElementById("committee").value = "";
+        document.getElementById("agendaItem").value = "";
+        document.getElementById("mainSubmitter").value = "";
+        
+        // Clear clauses
+        document.getElementById("preambulatoryClauses").innerHTML = "";
+        document.getElementById("operativeClauses").innerHTML = "";
+        preambulatoryCount = 0;
+        operativeCount = 0;
+        
+        // Clear signatories
+        signatories = [];
+        updateSignatoriesDisplay();
+        
+        // Clear output
+        document.getElementById("output").textContent = "";
+        
+        // Add initial clauses
+        addPreambulatoryClause();
+        addOperativeClause();
+      }
+    }
+  </script>
+</body>
+</html>
